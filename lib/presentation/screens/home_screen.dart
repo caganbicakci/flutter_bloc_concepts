@@ -62,9 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            const Text(
-              'You have pushed the button this many times:',
-            ),
             const SizedBox(
               height: 24,
             ),
@@ -106,6 +103,39 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 24,
             ),
+            Builder(
+              builder: (context) {
+                final counterState = context.watch<CounterCubit>().state;
+                final internetState = context.watch<InternetCubit>().state;
+
+                if (internetState is InternetConnected &&
+                    internetState.connectionType == ConnectionType.Mobile) {
+                  return Text(
+                      'Counter: ${counterState.counterValue} Internet: Mobile');
+                } else if (internetState is InternetConnected &&
+                    internetState.connectionType == ConnectionType.Wifi) {
+                  return Text(
+                      'Counter: ${counterState.counterValue} Internet: Wi-Fi');
+                } else {
+                  return Text(
+                      'Counter: ${counterState.counterValue} Internet: Disconnected');
+                }
+              },
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Builder(
+              builder: (context) {
+                final counterValue = context
+                    .select((CounterCubit cubit) => cubit.state.counterValue);
+
+                return Text('Counter: $counterValue');
+              },
+            ),
+            const SizedBox(
+              height: 24,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -113,13 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () =>
                         BlocProvider.of<CounterCubit>(context).decrement(),
                     tooltip: "Decrement",
-                    child: Icon(Icons.remove),
+                    child: const Icon(Icons.remove),
                     heroTag: null),
                 FloatingActionButton(
                     onPressed: () =>
                         BlocProvider.of<CounterCubit>(context).increment(),
                     tooltip: "Increment",
-                    child: Icon(Icons.add),
+                    child: const Icon(Icons.add),
                     heroTag: null)
               ],
             ),
@@ -130,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 Navigator.of(context).pushNamed('/second');
               },
-              child: Text("Go to Second Screen"),
+              child: const Text("Go to Second Screen"),
               color: Colors.redAccent,
               textColor: Colors.white,
             ),
@@ -141,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 Navigator.of(context).pushNamed('/third');
               },
-              child: Text("Go to Third Screen"),
+              child: const Text("Go to Third Screen"),
               color: Colors.green,
               textColor: Colors.white,
             )
